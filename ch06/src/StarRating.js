@@ -3,23 +3,19 @@ import Star from './Star'
 
 const createArray = (length) => [...Array(length)]
 
-function StarRating({ style = {}, totalStars = 5, ...props }) {
-  const [selectedStars, setSelectedStars] = React.useState(0)
+function StarRating({ totalStars = 5, selectedStars = 0 }) {
+  // const [selectedStars, setSelectedStars] = React.useState(0)
   return (
-    <div style={{ padding: '5px', ...style }} {...props}>
+    <>
       {[
         createArray(totalStars).map((n, i) => (
-          <Star
-            key={i}
-            selected={selectedStars > i}
-            onSelect={() => setSelectedStars(i + 1)}
-          />
+          <Star key={i} selected={selectedStars > i} />
         )),
       ]}
       <p>
         {selectedStars} of {totalStars} stars
       </p>
-    </div>
+    </>
   )
 }
 export default StarRating
