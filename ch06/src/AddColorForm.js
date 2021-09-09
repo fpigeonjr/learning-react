@@ -2,8 +2,6 @@ import React from 'react'
 import useInput from './hooks/useInput'
 
 function AddColorForm({ onNewColor = (f) => f }) {
-  // const txtTitle = React.useRef()
-  // const hexColor = React.useRef()
   const [titleProps, resetTitle] = useInput('')
   const [colorProps, resetColor] = useInput('#000000')
 
