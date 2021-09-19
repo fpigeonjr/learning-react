@@ -3,7 +3,12 @@ import './App.css'
 
 function CheckBox() {
   const [checked, setChecked] = React.useState(false)
-  alert(`checked: ${checked.toString()}`)
+
+  React.useEffect(() => {
+    alert(`checked: ${checked.toString()}`)
+    console.log(checked ? 'yes checked' : 'No not checked')
+    localStorage.setItem('checkbox-value', checked)
+  })
 
   return (
     <>
