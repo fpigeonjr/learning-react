@@ -33,11 +33,11 @@ function App() {
 
   React.useEffect(() => {
     console.log(`typing "${val}"`)
-  })
+  }, [val])
 
   React.useEffect(() => {
     console.log(`saved phrase: "${phrase}"`)
-  })
+  }, [phrase])
 
   return (
     <div className="App">
