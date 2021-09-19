@@ -22,39 +22,37 @@ function CheckBox() {
   )
 }
 
-function App() {
-  const [val, setVal] = React.useState('')
-  const [phrase, setPhrase] = React.useState('example phrase')
+const useAnyKeyToRender = () => {
+  const [, forceRender] = React.useState()
+  React.useEffect(() => {
+    window.addEventListener('keydown', forceRender)
+    return () => window.removeEventListener('keydown', forceRender)
+  }, [])
+}
 
-  const createPhrase = () => {
-    setPhrase(val)
-    setVal('')
-  }
+// const words = ['sick', 'powder', 'day']
+
+function WordCount({ children = '' }) {
+  useAnyKeyToRender()
+
+  const words = React.useMemo(() => children.split(' '), [children])
 
   React.useEffect(() => {
-    console.log(`typing "${val}"`)
-  }, [val])
-
-  React.useEffect(() => {
-    console.log(`saved phrase: "${phrase}"`)
-  }, [phrase])
-
-  React.useEffect(() => {
-    console.log('either val or phrase was changed')
-  }, [val, phrase])
+    console.log('fresh render')
+  }, [words])
 
   return (
-    <div className="App">
-      <h1>Hello Chapter 7</h1>
-      <label htmlFor="phrase">Favorite phrase:</label>
-      <input
-        value={val}
-        placeholder={phrase}
-        onChange={(e) => setVal(e.target.value)}
-      />
-      <button onClick={createPhrase}>send</button>
-    </div>
+    <>
+      <p>{children}</p>
+      <p>
+        <strong>{words.length} - words</strong>
+      </p>
+    </>
   )
+}
+
+function App() {
+  return <WordCount>You are not going to believe this but...</WordCount>
 }
 
 export default App
