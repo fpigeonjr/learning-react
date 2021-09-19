@@ -91,8 +91,39 @@ function User() {
   )
 }
 
+const Cat = ({ name, meow = (f) => f }) => {
+  console.log(`rendering ${name}`)
+  return <p onClick={() => meow(name)}>{name}</p>
+}
+
+const RenderCatOnce = React.memo(Cat, () => true)
+const AlwaysRenderCat = React.memo(Cat, () => false)
+
+const PureCat = React.memo(
+  Cat,
+  (prevProps, nextProps) => prevProps.name === nextProps.name
+)
+
 function App() {
-  return <User />
+  const [cats, setCats] = React.useState(['Biscuit', 'Jungle', 'Outlaw'])
+  return (
+    <>
+      {cats.map((name, i) => (
+        <PureCat
+          key={i}
+          name={name}
+          meow={(name) => console.log(`${name} has meowed`)}
+        />
+      ))}
+      <button
+        onClick={() => {
+          setCats([...cats, prompt('Name a cat')])
+        }}
+      >
+        Add a cat
+      </button>
+    </>
+  )
 }
 
 export default App
