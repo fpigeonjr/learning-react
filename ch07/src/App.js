@@ -23,10 +23,32 @@ function CheckBox() {
 }
 
 function App() {
+  const [val, setVal] = React.useState('')
+  const [phrase, setPhrase] = React.useState('example phrase')
+
+  const createPhrase = () => {
+    setPhrase(val)
+    setVal('')
+  }
+
+  React.useEffect(() => {
+    console.log(`typing "${val}"`)
+  })
+
+  React.useEffect(() => {
+    console.log(`saved phrase: "${phrase}"`)
+  })
+
   return (
     <div className="App">
       <h1>Hello Chapter 7</h1>
-      <CheckBox />
+      <label htmlFor="phrase">Favorite phrase:</label>
+      <input
+        value={val}
+        placeholder={phrase}
+        onChange={(e) => setVal(e.target.value)}
+      />
+      <button onClick={createPhrase}>send</button>
     </div>
   )
 }
