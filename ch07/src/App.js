@@ -39,6 +39,10 @@ function App() {
     console.log(`saved phrase: "${phrase}"`)
   }, [phrase])
 
+  React.useEffect(() => {
+    console.log('either val or phrase was changed')
+  }, [val, phrase])
+
   return (
     <div className="App">
       <h1>Hello Chapter 7</h1>
