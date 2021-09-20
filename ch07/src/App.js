@@ -106,24 +106,10 @@ const PureCat = React.memo(
 
 function App() {
   const [cats, setCats] = React.useState(['Biscuit', 'Jungle', 'Outlaw'])
-  return (
-    <>
-      {cats.map((name, i) => (
-        <PureCat
-          key={i}
-          name={name}
-          meow={(name) => console.log(`${name} has meowed`)}
-        />
-      ))}
-      <button
-        onClick={() => {
-          setCats([...cats, prompt('Name a cat')])
-        }}
-      >
-        Add a cat
-      </button>
-    </>
-  )
+  const meow = React.useCallback((name) => {
+    console.log(`${name} has meowed.`)
+  }, [])
+  return <PureCat name="Biscuit" meow={meow} />
 }
 
 export default App
