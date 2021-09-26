@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import faker from 'faker'
 import { FixedSizeList } from 'react-window'
-import { Fetch } from './Fetch'
+import Fetch from './Fetch'
+import UserRepositories from './UserRepositories'
 
 const loadJSON = (key) => key && JSON.parse(localStorage.getItem(key))
 const saveJSON = (key, data) => localStorage.setItem(key, JSON.stringify(data))
@@ -15,6 +16,10 @@ function UserDetails({ data }) {
         {data.name && <p> {data.name} </p>}
         {data.location && <p>{data.location}</p>}
       </div>
+      <UserRepositories
+        login={data.login}
+        onSelect={(repoName) => console.log(`${repoName} was selected`)}
+      />
     </div>
   )
 }

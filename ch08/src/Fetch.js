@@ -1,6 +1,6 @@
 import { useFetch } from './useFetch'
 
-export function Fetch({
+export default function Fetch({
   uri,
   renderSuccess,
   loadingFallback = <p>loading...</p>,
