@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import faker from 'faker'
 import { FixedSizeList } from 'react-window'
-import { useFetch } from './useFetch'
+import { Fetch } from './Fetch'
 
 const loadJSON = (key) => key && JSON.parse(localStorage.getItem(key))
 const saveJSON = (key, data) => localStorage.setItem(key, JSON.stringify(data))
 
-function GitHubUser({ login }) {
-  const { loading, data, error } = useFetch(
-    `https://api.github.com/users/${login}`
-  )
-
-  if (loading) return <h1>loading...</h1>
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
-
+function UserDetails({ data }) {
   return (
     <div className="githubuser">
       <img src={data.avatar_url} alt={data.login} style={{ width: 200 }} />
@@ -23,6 +16,15 @@ function GitHubUser({ login }) {
         {data.location && <p>{data.location}</p>}
       </div>
     </div>
+  )
+}
+
+function GitHubUser({ login }) {
+  return (
+    <Fetch
+      uri={`https://api.github.com/users/${login}`}
+      renderSuccess={UserDetails}
+    />
   )
 }
 
