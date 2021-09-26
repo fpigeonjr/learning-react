@@ -55,11 +55,23 @@ const tahoe_peaks = [
   },
 ]
 
+function List({ data = [], renderItem, renderEmpty }) {
+  return !data.length ? (
+    renderEmpty
+  ) : (
+    <ul>
+      {data.map((item, i) => (
+        <li key={i}>{renderItem(item)}</li>
+      ))}
+    </ul>
+  )
+}
+
 export default function App() {
   return (
     <>
       <GitHubUser login="fpigeonjr" />
-      <h2>Tahoe Peaks</h2>
+      <h2>Tahoe Peaks Static</h2>
       <ul>
         {tahoe_peaks.map((peak, i) => (
           <li key={i}>
@@ -67,6 +79,16 @@ export default function App() {
           </li>
         ))}
       </ul>
+      <h2>Using List</h2>
+      <List
+        data={tahoe_peaks}
+        renderEmpty={<p>This List is empty.</p>}
+        renderItem={(item) => (
+          <>
+            {item.name} - {item.elevation.toLocaleString()}ft
+          </>
+        )}
+      />
     </>
   )
 }
