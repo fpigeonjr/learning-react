@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import faker from 'faker'
+import { FixedSizeList } from 'react-window'
 
 const loadJSON = (key) => key && JSON.parse(localStorage.getItem(key))
 const saveJSON = (key, data) => localStorage.setItem(key, JSON.stringify(data))
@@ -67,6 +69,32 @@ function List({ data = [], renderItem, renderEmpty }) {
   )
 }
 
+// virtualized lists
+
+const bigList = [...Array(5000)].map(() => ({
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  avatar: faker.internet.avatar(),
+}))
+
+const renderProfile = (item) => (
+  <div style={{ display: 'flex' }}>
+    <img src={item.avatar} alt={item.name} width={50} />
+    <p>
+      {item.name} - {item.email.toLowerCase()}
+    </p>
+  </div>
+)
+
+const renderRow = ({ index, style }) => (
+  <div style={{ ...style, ...{ display: 'flex' } }}>
+    <img src={bigList[index].avatar} alt={bigList[index].name} width={50} />
+    <p>
+      {bigList[index].name} - {bigList[index].email.toLocaleLowerCase()}
+    </p>
+  </div>
+)
+
 export default function App() {
   return (
     <>
@@ -89,6 +117,16 @@ export default function App() {
           </>
         )}
       />
+      <h2>Render Faker List</h2>
+      {/* <List data={bigList} renderItem={renderProfile} /> */}
+      <FixedSizeList
+        height={window.innerHeight}
+        width={window.innerWidth - 20}
+        itemCount={bigList.length}
+        itemSize={50}
+      >
+        {renderRow}
+      </FixedSizeList>
     </>
   )
 }
