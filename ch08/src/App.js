@@ -90,6 +90,8 @@ const renderRow = ({ index, style }) => (
 export default function App() {
   return (
     <>
+      <h2>Iterator</h2>
+
       <GitHubUser login="fpigeonjr" />
       <h2>Tahoe Peaks Static</h2>
       <ul>
