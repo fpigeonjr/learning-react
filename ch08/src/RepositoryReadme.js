@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import { useMountedRef } from './useMountedRef'
 
 export default function RepositoryReadme({ repo, login }) {
+  const mounted = useMountedRef()
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState()
   const [markdown, setMarkdown] = React.useState('')
@@ -10,8 +12,10 @@ export default function RepositoryReadme({ repo, login }) {
     const uri = `https://api.github.com/repos/${login}/${repo}/readme`
     const { download_url } = await fetch(uri).then((res) => res.json())
     const markdown = await fetch(download_url).then((res) => res.text())
-    setMarkdown(markdown)
-    setLoading(false)
+    if (mounted.current) {
+      setMarkdown(markdown)
+      setLoading(false)
+    }
 
     console.log(`Markdown for ${repo}\n\n${markdown}`)
   }, [])
