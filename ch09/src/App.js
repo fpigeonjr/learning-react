@@ -1,11 +1,21 @@
 import SiteLayout from './SiteLayout'
 import './App.css'
+import ErrorBoundary from './ErrorBoundary'
+import ErrorScreen from './ErrorScreen'
+import BreakThings from './BreakThings'
 
 const Callout = ({ children }) => <div className="callout">{children}</div>
 
 function App() {
   return (
-    <SiteLayout menu={<p> Menu </p>}>
+    <SiteLayout
+      menu={
+        <ErrorBoundary fallback={ErrorScreen}>
+          <p> Site Layout Menu </p>
+          <BreakThings />
+        </ErrorBoundary>
+      }
+    >
       <>
         <Callout>Callout</Callout>
         <h1>Contents</h1>
