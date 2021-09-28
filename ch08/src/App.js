@@ -3,24 +3,48 @@ import faker from 'faker'
 import { FixedSizeList } from 'react-window'
 import Fetch from './Fetch'
 import UserRepositories from './UserRepositories'
+import { GraphQLClient } from 'graphql-request'
 
 const loadJSON = (key) => key && JSON.parse(localStorage.getItem(key))
 const saveJSON = (key, data) => localStorage.setItem(key, JSON.stringify(data))
 
-function UserDetails({ data }) {
+const query = `
+query findRepos($login: String!) {
+  user(login: $login) {
+    login
+    name
+    location
+    avatar_url:avatarUrl
+    repositories(first: 100) {
+      totalCount
+      nodes {
+        name
+      }
+    }
+  }
+}
+`
+
+const client = new GraphQLClient('https://api.github.com/graphql', {
+  headers: {
+    Authorization: `Bearer ${process.env.REACT_APP_GH_KEY}`,
+  },
+})
+
+function UserDetails(props) {
   return (
-    <div className="githubuser">
-      <img src={data.avatar_url} alt={data.login} style={{ width: 200 }} />
-      <div>
-        <h1>{data.login}</h1>
-        {data.name && <p> {data.name} </p>}
-        {data.location && <p>{data.location}</p>}
+    <>
+      <div className="githubuser">
+        <img src={props.avatar_url} alt={props.login} style={{ width: 200 }} />
+        <h1>{props.login}</h1>
+        {props.name && <p> {props.name} </p>}
+        {props.location && <p>{props.location}</p>}
+        {/* <UserRepositories
+          login={props.login}
+          onSelect={(repoName) => console.log(`${repoName} was selected`)}
+        /> */}
       </div>
-      <UserRepositories
-        login={data.login}
-        onSelect={(repoName) => console.log(`${repoName} was selected`)}
-      />
-    </div>
+    </>
   )
 }
 
@@ -93,9 +117,31 @@ const renderRow = ({ index, style }) => (
 )
 
 export default function App() {
+  const [login, setLogin] = React.useState('fpigeonjr')
+  const [userData, setUserData] = React.useState()
+
+  React.useEffect(() => {
+    client
+      .request(query, { login: 'fpigeonjr' })
+      .then(({ user }) => user)
+      .then(setUserData)
+      .then((results) => JSON.stringify(results, null, 2))
+      .then(console.log)
+      .catch(console.error)
+  }, [client, query, login])
+
+  if (!userData) return <p>loading...</p>
+
   return (
     <>
-      <h2>Iterator</h2>
+      <UserDetails {...userData} />
+      <p>{userData.repositories.totalCount} - repos</p>
+      <List
+        data={userData.repositories.nodes}
+        renderItem={(repo) => <span>{repo.name}</span>}
+      />
+
+      {/* <h2>Iterator</h2>
 
       <GitHubUser login="fpigeonjr" />
       <h2>Tahoe Peaks Static</h2>
@@ -118,14 +164,14 @@ export default function App() {
       />
       <h2>Render Faker List</h2>
       {/* <List data={bigList} renderItem={renderProfile} /> */}
-      <FixedSizeList
+      {/* <FixedSizeList
         height={window.innerHeight}
         width={window.innerWidth - 20}
         itemCount={bigList.length}
         itemSize={50}
       >
         {renderRow}
-      </FixedSizeList>
+      </FixedSizeList>{' '} */}
     </>
   )
 }
