@@ -7,10 +7,25 @@ import React from 'react'
 //   throw new Error('something went wrong')
 // }
 //3. promise
-const loadStatus = () => {
-  console.log('load status')
-  throw new Promise((resolves) => setTimeout(resolves, 3000))
-}
+// function loadStatus() {
+//   if (error) throw error
+//   if (response) return response
+//   throw promise
+// }
+
+// closure example
+const loadStatus = (function () {
+  let error, response
+  const promise = new Promise((resolves) => setTimeout(resolves, 3000)).then(
+    () => (response = 'success').catch((e) => (error = e))
+  )
+
+  return function () {
+    if (error) throw error
+    if (response) return response
+    throw pending
+  }
+})()
 
 export default function Status() {
   const status = loadStatus()
