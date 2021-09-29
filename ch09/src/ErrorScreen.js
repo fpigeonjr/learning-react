@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ErrorScreen({ error }) {
+function ErrorScreen({ error, errorInfo }) {
   // handle or track error before rendering
   return (
     <div
@@ -14,7 +14,7 @@ function ErrorScreen({ error }) {
     >
       <h3>We are sorry....something went wrong</h3>
       <p>We cannot process your request at this moment</p>
-      <p>ERROR: {error.message}</p>
+      <p>ERROR: {error && errorInfo.componentStack}</p>
     </div>
   )
 }
