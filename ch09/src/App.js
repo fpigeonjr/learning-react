@@ -17,9 +17,13 @@ function App() {
       }
     >
       <>
-        <Callout>Callout</Callout>
-        <h1>Contents</h1>
-        <p>This is the main part of the example layout</p>
+        <ErrorBoundary fallback={ErrorScreen}>
+          <Callout>Callout</Callout>
+        </ErrorBoundary>
+        <ErrorBoundary fallback={ErrorScreen}>
+          <h1>Contents</h1>
+          <p>This is the main part of the example layout</p>
+        </ErrorBoundary>
       </>
     </SiteLayout>
   )
