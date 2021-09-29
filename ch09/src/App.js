@@ -1,35 +1,24 @@
-import SiteLayout from './SiteLayout'
+import React from 'react'
 import './App.css'
+import Agreement from './Agreement'
+import { ClimbingBoxLoader, GridLoader } from 'react-spinners'
 import ErrorBoundary from './ErrorBoundary'
+import ErrorScreen from './ErrorScreen'
+import Status from './Status'
+const Main = React.lazy(() => import('./Main'))
 
-const Callout = ({ children }) => <div className="callout">{children}</div>
-const BreakThings = () => {
-  throw new Error('gremlins')
-}
+export default function App() {
+  const [agree, setAgree] = React.useState(false)
 
-function App() {
+  if (!agree) return <Agreement onAgree={() => setAgree(true)} />
   return (
-    <SiteLayout
-      menu={
-        <>
-          <ErrorBoundary>
-            <p> Site Layout Menu </p>
-            <BreakThings />
-          </ErrorBoundary>
-        </>
-      }
-    >
-      <>
-        <Callout>Callout</Callout>
-
-        <ErrorBoundary>
-          <h1>Contents</h1>
-          <p>This is the main part of the example layout</p>
-          <BreakThings />
-        </ErrorBoundary>
-      </>
-    </SiteLayout>
+    <React.Suspense fallback={<GridLoader />}>
+      <ErrorBoundary fallback={ErrorScreen}>
+        {/* <React.Suspense fallback={<ClimbingBoxLoader />}>
+        <Main />
+      </React.Suspense> */}
+        <Status />
+      </ErrorBoundary>
+    </React.Suspense>
   )
 }
-
-export default App
